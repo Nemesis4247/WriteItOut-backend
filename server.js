@@ -5,8 +5,13 @@ var knex = require('knex');
 const moment = require('moment');
 const app = express();
 
-const getQuestionsList = require('./controllers/getQuestionsList');
-const getQuestion = require('./controllers/getQuestion');
+// Read
+const getQuestionsList = require('./controllers/Read/getQuestionsList');
+const getQuestion = require('./controllers/Read/getQuestion');
+
+// Create
+const insertcomment = require('./controllers/Create/insertcomment')
+const answer = require('./controllers/Create/answer');
 
 
 
@@ -69,9 +74,14 @@ app.post('/registeruser', (req, res) => {
 
   res.send("registered successfully");
 });
-
+//Read
 app.get('/get-questionList', getQuestionsList.handleQuesList(db))
 
 app.get('/get-question/:id', getQuestion.handleQuestion(db))
+
+//Create
+app.post('/comment', insertcomment.handleInsertComment(db));
+
+app.post('/answer', answer.handleAnswer(db));
 
 app.listen(3001);
