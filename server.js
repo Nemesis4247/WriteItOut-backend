@@ -1,18 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bcrypt = require('bcrypt-nodejs')
 var knex = require('knex');
 const moment = require('moment');
 const app = express();
 
 // Read
+const signin = require('./controllers/Read/signin');
 const getQuestionsList = require('./controllers/Read/getQuestionsList');
 const getQuestion = require('./controllers/Read/getQuestion');
 
 // Create
+const register = require('./controllers/Create/register');
+const add_question = require('./controllers/Create/add_question');
 const insertcomment = require('./controllers/Create/insertcomment')
 const answer = require('./controllers/Create/answer');
 
+// Update
+const update_details = require('./controllers/Update/update_details');
 
 
 app.use(bodyParser.urlencoded({ extented: true }));
@@ -24,57 +30,31 @@ const db = knex({
   connection: {
     host: '127.0.0.1',
     user: 'postgres',
-    password: 'newPassword',
+    password: 'newpassword',
     database: 'writeitoutdb'
   }
 });
 
-
 console.log("it's working");
-app.post('/', (req, res) => {
+app.get('/', (req, res) => {
   console.log(req.body);
   res.send("success");
 });
 
-// signin endpoint
-app.post('/signin', (req, res) => {
-  console.log(req.body);
-  const { email, password } = req.body;
-  db('Users').where('email', '=', email).then((data) => {
-    if (data.length == 0) {
-      res.send("email not exist");
-    }
-    else {
-      if (data[0].password != password) {
-        res.send("password is not correct");
-      }
-      else {
-        res.send("signed in successfully");
-      }
-    }
-  });
-});
+app.post('/register', register.handleRegister(db, bcrypt))
 
+app.post('/signin', signin.handleSignin(db, bcrypt))
 
-//registeruser endpoint
-app.post('/registeruser', (req, res) => {
-  console.log(req.body);
-  const { userid, name, email, password, year, branch, description, profilepic } = req.body;
+app.post('/update_details', update_details.handleUpdateDetails(db))
 
-  db('users').insert({
-    userid: userid,
-    name: name,
-    email: email,
-    password: password,
-    year: year,
-    branch: branch,
-    description: description,
-    profilepic: profilepic
-  }).then();
-
+<<<<<<< HEAD
   res.send("registered successfully");
 });
 //Read
+=======
+app.post('/add_question', add_question.handleAddQuestion(db))
+
+>>>>>>> hemant-dev
 app.get('/get-questionList', getQuestionsList.handleQuesList(db))
 
 app.get('/get-question/:id', getQuestion.handleQuestion(db))
