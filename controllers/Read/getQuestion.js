@@ -1,5 +1,6 @@
 const handleQuestion = (db) => (req, res) => {
     db.select('*').from('questions')
+        .join('users', 'questions.userid', '=', 'users.userid')
         .where({
             queid: req.params.id
         }).then(ques => {
@@ -10,6 +11,7 @@ const handleQuestion = (db) => (req, res) => {
 
 const getanswer = (db, ques) => {
     return db.select('*').from('answers')
+        .join('users', 'answers.userid', '=', 'users.userid')
         .where({ queid: ques.queid })
         .then(ans => {
             console.log(ans)
@@ -17,6 +19,8 @@ const getanswer = (db, ques) => {
         }).then(ans => {
             const obj = {
                 que: ques.que,
+                name: ques.name,
+                description: ques.description,
                 answers: ans
             }
             console.log(obj)
@@ -26,6 +30,7 @@ const getanswer = (db, ques) => {
 
 const comments = (db, ans) => {
     return db.select('*').from('comments')
+        .join('users', 'comments.userid', '=', 'users.userid')
         .whereIn('ansid', ans.map(a => a.ansid))
         .then(comms => {
             console.log('comments : ', typeof ans)
