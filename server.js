@@ -10,6 +10,7 @@ const app = express();
 const signin = require('./controllers/Read/signin');
 const getQuestionsList = require('./controllers/Read/getQuestionsList');
 const getQuestion = require('./controllers/Read/getQuestion');
+const getProfile = require('./controllers/Read/getProfile');
 
 // Create
 const register = require('./controllers/Create/register');
@@ -30,7 +31,7 @@ const db = knex({
   connection: {
     host: '127.0.0.1',
     user: 'postgres',
-    password: 'newpassword',
+    password: 'newPassword',
     database: 'writeitoutdb'
   }
 });
@@ -47,14 +48,8 @@ app.post('/signin', signin.handleSignin(db, bcrypt))
 
 app.post('/update_details', update_details.handleUpdateDetails(db))
 
-<<<<<<< HEAD
-  res.send("registered successfully");
-});
-//Read
-=======
 app.post('/add_question', add_question.handleAddQuestion(db))
 
->>>>>>> hemant-dev
 app.get('/get-questionList', getQuestionsList.handleQuesList(db))
 
 app.get('/get-question/:id', getQuestion.handleQuestion(db))
@@ -63,5 +58,8 @@ app.get('/get-question/:id', getQuestion.handleQuestion(db))
 app.post('/comment', insertcomment.handleInsertComment(db));
 
 app.post('/answer', answer.handleAnswer(db));
+
+// Read
+app.get('/profile/:id', getProfile.handlegetProfile(db));
 
 app.listen(3001);
