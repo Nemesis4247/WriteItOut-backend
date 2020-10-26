@@ -1,10 +1,32 @@
 const handleQuesList = (db) => (req, res) => {
-    return db.select('*').from('questions')
-        .then(ques => {
-            console.log(ques)
-            res.json(ques)
-        })
-        .catch(err => res.status(400).json('Some error occurred :('))
+
+  db.select('queid', 'que', 'upvotes', 'tags', 'datetime', 'questions.userid', 'name', 'description', 'imagepath')
+  .from('questions')
+  .innerJoin('users', 'users.userid', 'questions.userid')
+  .orderBy('datetime', 'desc')
+  .then(data => {
+      return res.status(200)
+             .json(
+               {
+                  'status': true,
+                  'data': {
+                    'message': data
+                  }
+               }
+             );
+  })
+  .catch(err => {
+    return res.status(200)
+           .json(
+             {
+                'status': false,
+                'data': {
+                  'message': err
+                }
+             }
+           );
+  });
+
 }
 
 
