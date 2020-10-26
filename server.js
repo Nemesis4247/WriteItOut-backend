@@ -11,6 +11,7 @@ const signin = require('./controllers/Read/signin');
 const getQuestionsList = require('./controllers/Read/getQuestionsList');
 const getQuestion = require('./controllers/Read/getQuestion');
 const getProfile = require('./controllers/Read/getProfile');
+const getLikedQuestions = require('./controllers/Read/getLikedQuestions');
 
 // Create
 const register = require('./controllers/Create/register');
@@ -20,6 +21,7 @@ const answer = require('./controllers/Create/answer');
 
 // Update
 const update_details = require('./controllers/Update/update_details');
+const like_unlike_question = require('./controllers/Update/like_unlike_question');
 
 
 app.use(bodyParser.urlencoded({ extented: true }));
@@ -53,6 +55,10 @@ app.post('/add_question', add_question.handleAddQuestion(db))
 app.get('/get-questionList', getQuestionsList.handleQuesList(db))
 
 app.get('/get-question/:id', getQuestion.handleQuestion(db))
+
+app.post('/getLikedQuestions/', getLikedQuestions.handleLikedQuestions(db))
+
+app.post('/likeUnlikeQuestion', like_unlike_question.handleLikeUnlikeQuestion(db))
 
 //Create
 app.post('/comment', insertcomment.handleInsertComment(db));
