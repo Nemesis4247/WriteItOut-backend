@@ -13,6 +13,8 @@ const getanswer = (db, ques) => {
     return db.select('*').from('answers')
         .join('users', 'answers.userid', '=', 'users.userid')
         .where({ queid: ques.queid })
+        .orderBy('upvotes', 'desc')
+        .orderBy('datetime', 'desc')
         .then(ans => {
             console.log(ans)
             return comments(db, ans)
