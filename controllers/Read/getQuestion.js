@@ -34,6 +34,7 @@ const comments = (db, ans) => {
     return db.select('*').from('comments')
         .join('users', 'comments.userid', '=', 'users.userid')
         .whereIn('ansid', ans.map(a => a.ansid))
+        .orderBy('datetime', 'asc')
         .then(comms => {
             console.log('comments : ', typeof ans)
             Array.prototype.forEach.call(ans, a => {
