@@ -29,7 +29,7 @@ const handleRegister = (db, bcrypt) => (req, res) => {
       year: year,
       branch: branch,
       description: description,
-      profilepic: imagePath
+      imagepath: imagePath
     })
     .then(user => {
       res.status(200)
